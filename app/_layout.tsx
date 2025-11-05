@@ -1,29 +1,38 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+// app/_layout.tsx
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
+/**
+ * Single-screen stack with a white background.
+ * We remove tabs entirely and use one index route.
+ */
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+  useEffect(() => {
+    // Small nicety: on Android, set StatusBar style to dark-content via Expo component
+  }, []);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
+    <>
+      <StatusBar style="dark" />
+      <Stack
+        screenOptions={{
+          // Force a light background everywhere
+          contentStyle: { backgroundColor: "#fff" },
+          headerStyle: { backgroundColor: "#fff" },
+          headerTintColor: "#111",
+          headerTitleStyle: { color: "#111", fontWeight: "600" },
+        }}
+      >
+        <Stack.Screen
+          name="index"
+          options={{
+            title: "Climb Logs",
+          }}
+        />
+        {/* Keep not-found route support if you want */}
+        <Stack.Screen name="+not-found" options={{ title: "Not found" }} />
       </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    </>
   );
 }
