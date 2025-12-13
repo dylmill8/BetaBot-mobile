@@ -20,7 +20,11 @@ export const api = axios.create({
 });
 
 // Endpoints
-export const fetchClimbs = async () => (await api.get("/climbs/")).data;
+export const fetchClimbs = async (q: any = {}) => (await api.get("/climbs/", { params: q })).data;
+export const createClimb = async (payload: any) => (await api.post("/climbs/", payload)).data;
+export const updateClimb = async (id: number, payload: any) => (await api.put(`/climbs/${id}/`, payload)).data;
+export const deleteClimb = async (id: number) => (await api.delete(`/climbs/${id}/`)).status === 204;
+
 export const listLogs   = async (q: any = {}) => (await api.get("/logs/", { params: q })).data;
 export const createLog  = async (payload: any) => (await api.post("/logs/", payload)).data;
 export const updateLog  = async (id: number, payload: any) => (await api.put(`/logs/${id}/`, payload)).data;
